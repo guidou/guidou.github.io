@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>setSinkId and enumeration demo</title>
+  </head>
+  <body>
+    OGV video:
+    <video id='video' src='fireworks.ogv' width='150' height='100'></video><br>
+    <button onclick='video.paused ? video.play() : video.pause()'>Play/Pause</button><br><br>
+    <label id="sinklabel"></label><br><br>
+    Change Audio Device: <select id="audiodevice" onchange="deviceSelected(video, audio_select_video, sink_label_video)"><option value="invalid"></option></select><br><br>
+    <button id="refresh" onclick="refreshDeviceList(false, audio_select_video);">Refresh device list</button><br>
+    <button id="setdefault" onclick="video.setSinkId('');">Set default sinkId</button><br>
+  
+    <br><br><br>MP3 audio:
+
+    <audio id='myaudio' src='good_enough.mp3'></audio><br>
+    <button onclick='myaudio.paused ? myaudio.play() : myaudio.pause()'>Play/Pause</button><br><br>
+    <label id="sinklabel_myaudio"></label><br><br>
+    Change Audio Device: <select id="audiodevice_myaudio" onchange="deviceSelected(myaudio, audio_select_myaudio, sink_label_myaudio)"><option value="invalid"></option></select><br><br>
+    <button id="refresh_myaudio" onclick="refreshDeviceList(false, audio_select_myaudio);">Refresh device list</button><br>
+
+    
+    <br><br><br>Empty video element:
+    <video id='myvideo2'></video><br>
+    <button onclick='myvideo2.paused ? myvideo2.play() : myvideo2.pause()'>Play/Pause</button><br><br>
+    <label id="sinklabel_myvideo2"></label><br><br>
+    Change Audio Device: <select id="audiodevice" onchange="deviceSelected(myvideo2, audio_select_video, sink_label_myvideo2)"><option value="invalid"></option></select><br><br>
+    <button id="refresh" onclick="refreshDeviceList(false, audio_select_myvideo2);">Refresh device list</button><br>
+  
+
+
+<script>
+var video = null;
+var myaudio = null;
+var audio_select_video = null;
+var audio_select_myaudio = null;
+var sink_label_video = null;
+var sink_label_myaudio = null;
+
+window.onload = onLoad;
+
+function onLoad() {
+  audio_select_video = document.getElementById("audiodevice");
+  audio_select_myaudio = document.getElementById("audiodevice_myaudio");
+  video = document.getElementById("video");
+  myaudio = document.getElementById("myaudio");
+  sink_label_video = document.getElementById("sinklabel");
+  sink_label_myaudio = document.getElementById("sinklabel_myaudio");
+  //video.play();
+  navigator.webkitGetUserMedia(
+      {audio:true},
+      function(stream) {
+        refreshDeviceList(true,audio_select_video);
+        refreshDeviceList(true,audio_select_myaudio);
+        THESTREAM=stream;
+        stream.stop();
+        console.log("stream closed");
+      },
+      function(err) {alert(err);}
+  );
+}
+
+function refreshDeviceList(selectFirst, audio_select) {
+  navigator.mediaDevices.enumerateDevices().then( function(infos) {
+    var count = 0;
+    var curValue = audio_select.options[audio_select.selectedIndex].value;
+    var curValueFound = false;
+    audio_select.disabled = true;
+    audio_select.innerHTML = '';
+    for (var i = 0; i < infos.length; i++) {
+      if (infos[i].kind != 'audiooutput') {
+        continue;
+      }
+      var option = document.createElement("option");
+      option.value = infos[i].deviceId;
+      option.text = infos[i].label;
+      count++;
+      option.text = '' + (count) + ' - ' + option.text + ' ' + infos[i].kind;
+      audio_select.appendChild(option);
+      if (option.value == curValue) {
+        curValueFound = true;
+      }
+    }
+    audio_select.disabled = false;
+    if (selectFirst) {
+      deviceSelected();
+    } else if (curValueFound) {
+      audio_select.value = curValue;
+    }
+  }, function(msg) {
+    alert('Something wrong: ' + msg);
+  });
+}
+
+function deviceSelected(elem, audio_select, sink_label) {
+  var deviceId = null;
+  if (audio_select.options.length > 0) {
+    deviceId = audio_select.options[audio_select.selectedIndex].value;
+    var promise = elem.setSinkId(deviceId);
+    promise.then(function(result) {
+      sink_label.innerHTML = 'Audio output device sink ID is ' + elem.sinkId;
+    }, function(e) {
+      sink_label.innerHTML = 'Audio output device could not be set: ' + e.name + ' - ' + e.message;
+    });
+  } else {
+    alert("No audio devices found");
+  }
+}
+
+</script>
+
+  </body>
+</html>
