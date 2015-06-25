@@ -5,7 +5,7 @@
   </head>
   <body>
     OGV video:
-    <video id='video' src='fireworks.ogv' width='150' height='100'></video><br>
+    <video id='video' src='metalpothits.flac' width='150' height='100'></video><br>
     <button onclick='video.paused ? video.play() : video.pause()'>Play/Pause</button><br><br>
     <label id="sinklabel"></label><br><br>
     Change Audio Device: <select id="audiodevice" onchange="deviceSelected(video, audio_select_video, sink_label_video)"><option value="invalid"></option></select><br><br>
@@ -14,22 +14,13 @@
   
     <br><br><br>MP3 audio:
 
-    <audio id='myaudio' src='good_enough.mp3'></audio><br>
+    <audio id='myaudio' src='sinus_500hz.mp3'></audio><br>
     <button onclick='myaudio.paused ? myaudio.play() : myaudio.pause()'>Play/Pause</button><br><br>
     <label id="sinklabel_myaudio"></label><br><br>
     Change Audio Device: <select id="audiodevice_myaudio" onchange="deviceSelected(myaudio, audio_select_myaudio, sink_label_myaudio)"><option value="invalid"></option></select><br><br>
     <button id="refresh_myaudio" onclick="refreshDeviceList(false, audio_select_myaudio);">Refresh device list</button><br>
 
     
-    <br><br><br>Empty video element:
-    <video id='myvideo2'></video><br>
-    <button onclick='myvideo2.paused ? myvideo2.play() : myvideo2.pause()'>Play/Pause</button><br><br>
-    <label id="sinklabel_myvideo2"></label><br><br>
-    Change Audio Device: <select id="audiodevice" onchange="deviceSelected(myvideo2, audio_select_video, sink_label_myvideo2)"><option value="invalid"></option></select><br><br>
-    <button id="refresh" onclick="refreshDeviceList(false, audio_select_myvideo2);">Refresh device list</button><br>
-  
-
-
 <script>
 var video = null;
 var myaudio = null;
