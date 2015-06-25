@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>enumeration demo</title>
+  </head>
+  <body>
+    Devices:
+    <ul id="devicelist"></ul>
+    <button id="refresh" onclick="refreshDeviceList(false, device_list);">Refresh device list</button><br>
+
+
+<script>
+var device_list = null;
+
+window.onload = onLoad;
+
+function onLoad() {
+  device_list = document.getElementById("devicelist");
+  navigator.webkitGetUserMedia(
+      {audio:true},
+      function(stream) {
+        refreshDeviceList(true,device_list);
+        stream.stop();
+        console.log("stream closed");
+      },
+      function(err) {alert(err);}
+  );
+}
+
+function refreshDeviceList(selectFirst, the_list) {
+  while( the_list.firstChild ){
+      the_list.removeChild( the_list.firstChild );
+  }
+  navigator.mediaDevices.enumerateDevices().then( function(infos) {
+    var count = 0;
+    for (var i = 0; i < infos.length; i++) {
+      var item = document.createElement("li");
+      count++;
+      item.innerHTML = '' + (count) + ' - ' +  infos[i].kind + ' - ' + infos[i].deviceId + ' - ' + infos[i].label;
+      the_list.appendChild(item);
+    }
+  }, function(msg) {
+    alert('Something wrong: ' + msg);
+  });
+}
+
+</script>
+
+  </body>
+</html>
