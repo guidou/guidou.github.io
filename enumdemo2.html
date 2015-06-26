@@ -23,7 +23,7 @@ function onLoad() {
         stream.stop();
         console.log("stream closed");
       },
-      function(err) {addItem(err);}
+      function(err) {addItem(err + ' ' + err.name + ': ' + err.message);}
   );
 }
 
