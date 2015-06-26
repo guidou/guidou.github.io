@@ -6,7 +6,7 @@
   <body>
     Devices:
     <ul id="devicelist"></ul>
-    <button id="refresh" onclick="refreshDeviceList(false, device_list);">Refresh device list</button><br>
+    <button id="refresh" onclick="refreshDeviceList(false);">Refresh device list</button><br>
 
 
 <script>
@@ -23,19 +23,24 @@ function onLoad() {
         stream.stop();
         console.log("stream closed");
       },
-      function(err) {alert(err);}
+      function(err) {addItem(err);}
   );
 }
 
 function addItem(strItem) {
   var item = document.createElement("li");
   item.innerHTML = strItem;
-  the_list.appendChild(item);
+  device_list.appendChild(item);
 }
-function refreshDeviceList(selectFirst, the_list) {
-  while( the_list.firstChild ){
-      the_list.removeChild( the_list.firstChild );
+
+function clearItems() {
+  while (device_list.firstChild ){
+      device_list.removeChild(device_list.firstChild );
   }
+}
+
+function refreshDeviceList(selectFirst) {
+  clearItems()
   if (!navigator.mediaDevices) {
     addItem('navigator.mediaDevices not supported');
     return;
