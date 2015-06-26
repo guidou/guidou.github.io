@@ -27,26 +27,28 @@ function onLoad() {
   );
 }
 
+function addItem(strItem) {
+  var item = document.createElement("li");
+  item.innerHTML = strItem;
+  the_list.appendChild(item);
+}
 function refreshDeviceList(selectFirst, the_list) {
   while( the_list.firstChild ){
       the_list.removeChild( the_list.firstChild );
   }
   if (!navigator.mediaDevices) {
-    alert('navigator.mediaDevices not supported');
+    addItem('navigator.mediaDevices not supported');
     return;
   }
-  
   if (!navigator.mediaDevices.enumerateDevices) {
-    alert('enumerateDevices not supported');
+    addItem('enumerateDevices not supported');
     return;
   }
   navigator.mediaDevices.enumerateDevices().then( function(infos) {
     var count = 0;
     for (var i = 0; i < infos.length; i++) {
-      var item = document.createElement("li");
       count++;
-      item.innerHTML = '' + (count) + ' - ' +  infos[i].kind + ' - ' + infos[i].deviceId + ' - ' + infos[i].label;
-      the_list.appendChild(item);
+      addItem('' + (count) + ' - ' +  infos[i].kind + ' - ' + infos[i].deviceId + ' - ' + infos[i].label);
     }
   }, function(msg) {
     alert('Something wrong: ' + msg);
