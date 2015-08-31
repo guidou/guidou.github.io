@@ -21,7 +21,6 @@ function onLoad() {
       function(stream) {
         refreshDeviceList(true,device_list);
         stream.getAudioTracks()[0].stop();
-        stream.getVideoTracks()[0].stop();
         console.log("stream closed");
       },
       function(err) {addItem(err + ' ' + err.name + ': ' + err.message);}

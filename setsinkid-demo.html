@@ -45,7 +45,6 @@ function onLoad() {
         refreshDeviceList(true,audio_select_myaudio);
         THESTREAM=stream;
         stream.getAudioTracks()[0].stop();
-        stream.getVideoTracks()[0].stop();
         console.log("stream closed");
       },
       function(err) {alert(err);}
