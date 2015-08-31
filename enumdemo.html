@@ -19,9 +19,10 @@ function onLoad() {
   navigator.webkitGetUserMedia(
       {audio:true},
       function(stream) {
-        refreshDeviceList(true,device_list);
-        stream.stop();
+        stream.getAudioTracks()[0].stop();
+        stream.getVideoTracks()[0].stop();
         console.log("stream closed");
+        refreshDeviceList(true,device_list);
       },
       function(err) {addItem(err + ' ' + err.name + ': ' + err.message);}
   );
