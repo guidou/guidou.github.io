@@ -103,10 +103,7 @@ function deviceSelected(elem, audio_select, sink_label) {
 }
 
 function changeSource(audio_elem, list_elem, label) {
-  console.log('changeSource()')
-  console.log(audio_elem)
-  console.log(list_elem)
-  console.log(label)
+  //console.log('changeSource()')
   audio_elem.src = list_elem.options[list_elem.selectedIndex].value;
   label.innerHTML = 'Selected source: ' + list_elem.options[list_elem.selectedIndex].text;
 }
