@@ -13,7 +13,7 @@
     <button id="setdefault" onclick="video.setSinkId('');">Set default sinkId</button><br>
 
     <br><br><br>MP3 500Hz sine wave:
-    <audio id='myaudio' src='sinus_500hz.mp3'></audio><br>
+    <audio id='myaudio'></audio><br>
     <button onclick='myaudio.paused ? myaudio.play() : myaudio.pause()'>Play/Pause</button><br><br>
     <label id="sinklabel_myaudio"></label><br><br>
     Change Audio Device: <select id="audiodevice_myaudio" onchange="deviceSelected(myaudio, audio_select_myaudio, sink_label_myaudio)"><option value="invalid"></option></select><br><br>
@@ -96,12 +96,17 @@ function deviceSelected(elem, audio_select, sink_label) {
 function setupSourceList(list_elem) {
   list_elem.disabled = true;
   var option = document.createElement("option");
-  option.value = "sinus_500hz.mp3";
-  option.text = "Sinus - annoying";
+  option.value = "Audiobeast.mp3";
+  option.text = "Audiobeast";
   list_elem.appendChild(option);
   option = document.createElement("option");
-  option.value = "";
-  option.text = "";
+  option.value = "Beat3.mp3";
+  option.text = "Beat3";
+  list_elem.appendChild(option);
+  list_elem.appendChild(option);
+  option = document.createElement("option");
+  option.value = "Guitar10.mp3";
+  option.text = "Guitar10";
   list_elem.appendChild(option);
   list_elem.disabled = false;
   list_elem.selectedIndex = 0;
