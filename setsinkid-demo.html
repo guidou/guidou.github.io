@@ -12,8 +12,8 @@
     <button id="refresh" onclick="refreshDeviceList(false, audio_select_video);">Refresh device list</button><br>
     <button id="setdefault" onclick="video.setSinkId('');">Set default sinkId</button><br>
   
-    <br><br><br>MP3 500Hz sine wave:
-    <audio id='myaudio' src='sinus_500hz.mp3'></audio><br>
+    <br><br><br>MP3 audio:
+    <audio id='myaudio' src='Audiobeast.mp3'></audio><br>
     <button onclick='myaudio.paused ? myaudio.play() : myaudio.pause()'>Play/Pause</button><br><br>
     <label id="sinklabel_myaudio"></label><br><br>
     Change Audio Device: <select id="audiodevice_myaudio" onchange="deviceSelected(myaudio, audio_select_myaudio, sink_label_myaudio)"><option value="invalid"></option></select><br><br>

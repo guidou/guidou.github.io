@@ -12,13 +12,19 @@
     <button id="refresh" onclick="refreshDeviceList(false, audio_select_video);">Refresh device list</button><br>
     <button id="setdefault" onclick="video.setSinkId('');">Set default sinkId</button><br>
 
-    <br><br><br>MP3 500Hz sine wave:
+    <br><br><br>MP3 audio:
     <audio id='myaudio'></audio><br>
     <button onclick='myaudio.paused ? myaudio.play() : myaudio.pause()'>Play/Pause</button><br><br>
     <label id="sinklabel_myaudio"></label><br><br>
     Change Audio Device: <select id="audiodevice_myaudio" onchange="deviceSelected(myaudio, audio_select_myaudio, sink_label_myaudio)"><option value="invalid"></option></select><br><br>
     <button id="refresh_myaudio" onclick="refreshDeviceList(false, audio_select_myaudio);">Refresh device list</button><br>
-    Change Source: <select id="source_myaudio" onchange="changeSource(myaudio, source_select_myaudio)"><option value="invalid"</option></select>
+    <label id="sourcelabel_myaudio"></label><br>
+    Change Source: <select id="source_myaudio" onchange="changeSource(myaudio, source_select_myaudio, source_label_myaudio)">
+      <option value="Audiobeast.mp3">Audiobeast</option>
+      <option value="Guitar10.mp3">Guitar</option>
+      <option value="Beat3.mp3">Beat3</option>
+      <option value="Beat4.mp3">Beat4</option>
+    </select>
 
 <script>
 var video = null;
@@ -28,22 +34,25 @@ var audio_select_myaudio = null;
 var sink_label_video = null;
 var sink_label_myaudio = null;
 var source_select_myaudio = null;
+var source_label_myaudio = null;
 
 window.onload = onLoad;
 
 function onLoad() {
-  audio_select_video = document.getElementById("audiodevice");
-  audio_select_myaudio = document.getElementById("audiodevice_myaudio");
   video = document.getElementById("video");
-  myaudio = document.getElementById("myaudio");
+  audio_select_video = document.getElementById("audiodevice");
   sink_label_video = document.getElementById("sinklabel");
+  
+  myaudio = document.getElementById("myaudio");
+  audio_select_myaudio = document.getElementById("audiodevice_myaudio");
   sink_label_myaudio = document.getElementById("sinklabel_myaudio");
+  source_select_myaudio = document.getElementById("source_myaudio");
+  source_label_myaudio = document.getElementById("sourcelabel_myaudio");
   //video.play();
   refreshDeviceList(true,audio_select_video);
   refreshDeviceList(true,audio_select_myaudio);
 
-  source_select_myaudio = document.getElementById("source_myaudio");
-  setupSourceList(source_select_myaudio);
+  changeSource(myaudio, source_select_myaudio, source_label_myaudio);
 }
 
 function refreshDeviceList(selectFirst, audio_select) {
@@ -93,27 +102,13 @@ function deviceSelected(elem, audio_select, sink_label) {
   }
 }
 
-function setupSourceList(list_elem) {
-  list_elem.disabled = true;
-  var option = document.createElement("option");
-  option.value = "Audiobeast.mp3";
-  option.text = "Audiobeast";
-  list_elem.appendChild(option);
-  option = document.createElement("option");
-  option.value = "Beat3.mp3";
-  option.text = "Beat3";
-  list_elem.appendChild(option);
-  list_elem.appendChild(option);
-  option = document.createElement("option");
-  option.value = "Guitar10.mp3";
-  option.text = "Guitar10";
-  list_elem.appendChild(option);
-  list_elem.disabled = false;
-  list_elem.selectedIndex = 0;
-}
-
-function changeSource(audio_elem, list_elem) {
+function changeSource(audio_elem, list_elem, label) {
+  console.log('changeSource()')
+  console.log(audio_elem)
+  console.log(list_elem)
+  console.log(label)
   audio_elem.src = list_elem.options[list_elem.selectedIndex].value;
+  label.innerHTML = 'Selected source: ' + list_elem.options[list_elem.selectedIndex].text;
 }
 
 </script>
