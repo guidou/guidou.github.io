@@ -104,8 +104,11 @@ function deviceSelected(elem, audio_select, sink_label) {
 
 function changeSource(audio_elem, list_elem, label) {
   //console.log('changeSource()')
+  is_paused = audio_elem.paused;
   audio_elem.src = list_elem.options[list_elem.selectedIndex].value;
   label.innerHTML = 'Selected source: ' + list_elem.options[list_elem.selectedIndex].text;
+  if (!is_paused)
+    audio_elem.play()
 }
 
 </script>
