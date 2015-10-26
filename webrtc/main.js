@@ -103,7 +103,8 @@ function start() {
   navigator.mediaDevices.getUserMedia(constraints)
   .then(function(stream) {
     window.stream = stream; // make stream available to console
-    videoElement.srcObject = stream;
+    //videoElement.srcObject = stream;
+    videoElement.src = window.webkitURL.createObjectURL(stream);
     // Refresh button list in case labels have become available
     return navigator.mediaDevices.enumerateDevices();
   })
