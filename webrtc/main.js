@@ -88,6 +88,7 @@ function changeAudioDestination() {
 }
 
 function start() {
+  console.log("Starting DEMO");
   if (window.stream) {
     window.stream.getTracks().forEach(function(track) {
       track.stop();
