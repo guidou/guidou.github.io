@@ -97,8 +97,8 @@ function start() {
   var audioSource = audioInputSelect.value;
   var videoSource = videoSelect.value;
   var constraints = {
-    audio: {deviceId: audioSource ? {exact: audioSource} : undefined},
-    video: {deviceId: videoSource ? {exact: videoSource} : undefined}
+    audio: true,
+    video: true
   };
   navigator.mediaDevices.getUserMedia(constraints)
   .then(function(stream) {
