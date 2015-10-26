@@ -102,6 +102,7 @@ function start() {
     },
     video: true
   };
+  console.log("SELECTED AUDIO INPUT " + audioSource);
   navigator.mediaDevices.getUserMedia(constraints)
   .then(function(stream) {
     window.stream = stream; // make stream available to console
