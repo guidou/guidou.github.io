@@ -98,11 +98,12 @@ function start() {
   var videoSource = videoSelect.value;
   var constraints = {
     audio: {
-      optional: [{sourceId: audioSource}]
+      optional: [{sourceId: audioSource, chromeRenderToAssociatedSink: true}]
     },
     video: true
   };
   console.log("SELECTED AUDIO INPUT " + audioSource);
+  console.log("SELECTED CRTAS true");
   navigator.mediaDevices.getUserMedia(constraints)
   .then(function(stream) {
     window.stream = stream; // make stream available to console
