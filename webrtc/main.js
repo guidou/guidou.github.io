@@ -98,7 +98,7 @@ function start() {
   var videoSource = videoSelect.value;
   var constraints = {
     audio: {
-      optional: [{sourceId: audioSource, chromeRenderToAssociatedSink: true}]
+      optional: [{sourceId: audioSource}, {chromeRenderToAssociatedSink: true}]
     },
     video: true
   };
