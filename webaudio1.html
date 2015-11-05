@@ -11,17 +11,15 @@
     Change Audio Device: <select id="audiodevice" onchange="deviceSelected(video, audio_select_video, sink_label_video)"><option value="invalid"></option></select><br><br>
     <button id="refresh" onclick="refreshDeviceList(false, audio_select_video);">Refresh device list</button><br>
     <button id="setdefault" onclick="video.setSinkId('');">Set default sinkId</button><br>
-  
+
     <br><br><br>MP3 audio:
     <audio id='myaudio' src='Audiobeast.mp3'></audio><br>
     <button onclick='myaudio.paused ? myaudio.play() : myaudio.pause()'>Play/Pause</button><br><br>
     <label id="sinklabel_myaudio"></label><br><br>
     Change Audio Device: <select id="audiodevice_myaudio" onchange="deviceSelected(myaudio, audio_select_myaudio, sink_label_myaudio)"><option value="invalid"></option></select><br><br>
     <button id="refresh_myaudio" onclick="refreshDeviceList(false, audio_select_myaudio);">Refresh device list</button><br>
-    
-    <button onclick='useOscillator()'>Oscillator</button><br><br>
 
-    
+
 <script>
 var video = null;
 var myaudio = null;
@@ -131,6 +129,9 @@ var sample = new AudioTagSample();
 }
 
 </script>
+
+    <br>
+    <button onclick='useOscillator()'>Oscillator</button><br><br>
 
   </body>
 </html>
