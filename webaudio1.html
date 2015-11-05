@@ -27,6 +27,7 @@ var audio_select_video = null;
 var audio_select_myaudio = null;
 var sink_label_video = null;
 var sink_label_myaudio = null;
+var context = new AudioContext(); // Create audio container
 
 window.onload = onLoad;
 
@@ -99,8 +100,8 @@ function deviceSelected(elem, audio_select, sink_label) {
 }
 
 function useOscillator() {
-  var context = new webkitAudioContext(); // Create audio container
   oscillator = context.createOscillator(); // Create sound source
+  mediastream = context.createMediaStreamDestination();
   oscillator.connect(context.destination); // Connect sound to output
   oscillator.start(0); // Play instantly
   console.log("SHOULD BE PLAYING OSCILLATOR");
