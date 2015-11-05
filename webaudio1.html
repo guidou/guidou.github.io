@@ -101,8 +101,11 @@ function deviceSelected(elem, audio_select, sink_label) {
 
 function useOscillator() {
   oscillator = context.createOscillator(); // Create sound source
-  mediastream = context.createMediaStreamDestination();
-  oscillator.connect(context.destination); // Connect sound to output
+  msNode = context.createMediaStreamDestination();
+  oscillator.connect(msNode); // Connect sound to output
+  url = URL.createObjectURL(msNode.stream);
+  myaudio.src = url;
+
   oscillator.start(0); // Play instantly
   console.log("SHOULD BE PLAYING OSCILLATOR");
 }
