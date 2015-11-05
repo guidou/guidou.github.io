@@ -105,7 +105,7 @@ function useOscillator() {
   oscillator = context.createOscillator(); // Create sound source
   oscillator.connect(context.destination); // Connect sound to output
   oscillator.start(0); // Play instantly
-
+  console.log("SHOULD BE PLAYING OSCILLATOR");
 }
 
 
