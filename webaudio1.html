@@ -103,8 +103,7 @@ function useOscillator() {
   oscillator = context.createOscillator(); // Create sound source
   msNode = context.createMediaStreamDestination();
   oscillator.connect(msNode); // Connect sound to output
-  url = URL.createObjectURL(msNode.stream);
-  myaudio.src = url;
+  myaudio.src = URL.createObjectURL(msNode.stream);
 
   oscillator.start(0); // Play instantly
   console.log("SHOULD BE PLAYING OSCILLATOR");
