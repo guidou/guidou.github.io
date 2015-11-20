@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>getUserMedia() demo</title>
+  </head>
+  <body>
+    <button id="refresh" onclick="callGUM();">Call getUserMedia()</button><br>
+The stream will be kept in a variable and will not be garbage collected.
+
+<script>
+
+STREAM=undefined;
+
+function onLoad() {
+  navigator.webkitGetUserMedia(
+      {audio:true, video:true},
+      function(s) {
+        STREAM=s
+      },
+      function() {alert(err + ' ' + err.name + ': ' + err.message);}
+  );
+}
+
+
+</script>
+
+  </body>
+</html>
