@@ -49,6 +49,17 @@ function onLoad() {
   sink_label_myaudio = document.getElementById("sinklabel_myaudio");
   source_select_myaudio = document.getElementById("source_myaudio");
   source_label_myaudio = document.getElementById("sourcelabel_myaudio");
+
+  navigator.webkitGetUserMedia(
+      {audio:true},
+      function(stream) {
+        refreshDeviceList(true,audio_select_video);
+        refreshDeviceList(true,audio_select_myaudio);
+        stream.getAudioTracks()[0].stop();
+      },
+      function(err) {alert(err);}
+  );
+
   //video.play();
   refreshDeviceList(true,audio_select_video);
   refreshDeviceList(true,audio_select_myaudio);
