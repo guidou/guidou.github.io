@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Redirect demo</title>
+  </head>
+  <body>
+    <br><br><br>MP3 audio:
+    <audio id='myaudio' src='Audiobeast.mp3'></audio><br>
+    <button onclick='myaudio.paused ? myaudio.play() : myaudio.pause()'>Play/Pause</button><br><br>
+    <label id="sinklabel_myaudio"></label><br><br>
+    Change Audio Device: <select id="audiodevice_myaudio" onchange="deviceSelected(myaudio, audio_select_myaudio, sink_label_myaudio)"><option value="invalid"></option></select><br><br>
+    <button id="refresh_myaudio" onclick="refreshDeviceList(false, audio_select_myaudio);">Refresh device list</button><br>
+
+    <audio id='myredir1'></audio><br>
+    <button onclick='myredir1.paused ? myredir1.play() : myredir1.pause()'>Play/Pause</button><br><br>
+    <label id="sinklabel_myredir1"></label><br><br>
+    Change Audio Device: <select id="audiodevice_myredir1" onchange="deviceSelected(myredir1, audio_select_myredir1, sink_label_myredir1)"><option value="invalid"></option></select><br><br>
+    <button id="refresh_myredir1" onclick="refreshDeviceList(false, audio_select_myredir1);">Refresh device list</button><br>
+
+    <audio id='myredir2'></audio><br>
+    <button onclick='myredir2.paused ? myredir2.play() : myredir2.pause()'>Play/Pause</button><br><br>
+    <label id="sinklabel_myredir2"></label><br><br>
+    Change Audio Device: <select id="audiodevice_myredir2" onchange="deviceSelected(myredir2, audio_select_myredir2, sink_label_myredir2)"><option value="invalid"></option></select><br><br>
+    <button id="refresh_myredir2" onclick="refreshDeviceList(false, audio_select_myredir2);">Refresh device list</button><br>
+
+    <button id="redirect" onclick="redirect2(myaudio, myredir1, myredir2);">Refresh device list</button><br>
+
+<script>
+var myaudio = null;
+var myredir1 = null;
+var myredir2 = null;
+var audio_select_myaudio = null;
+var audio_select_myredir1 = null;
+var audio_select_myredir2 = null;
+var sink_label_myaudio = null;
+var sink_label_myredir1 = null;
+var sink_label_myredir2 = null;
+
+window.onload = onLoad;
+
+function onLoad() {
+  audio_select_myaudio = document.getElementById("audiodevice_myaudio");
+  audio_select_myredir1 = document.getElementById("audiodevice_myredir1");
+  audio_select_myredir2 = document.getElementById("audiodevice_myredir2");
+  myaudio = document.getElementById("myaudio");
+  myredir1 = document.getElementById("myredir1");
+  myredir2 = document.getElementById("myredir2");
+  sink_label_myaudio = document.getElementById("sinklabel_myaudio");
+  sink_label_myredir1 = document.getElementById("sink_label_myredir1");
+  sink_label_myredir2 = document.getElementById("sink_label_myredir2");
+  //video.play();
+  navigator.webkitGetUserMedia(
+      {audio:true},
+      function(stream) {
+        refreshDeviceList(true,audio_select_video);
+        refreshDeviceList(true,audio_select_myaudio);
+        THESTREAM=stream;
+        stream.getAudioTracks()[0].stop();
+        console.log("stream closed");
+      },
+      function(err) {alert(err);}
+  );
+}
+
+function refreshDeviceList(selectFirst, audio_select) {
+  navigator.mediaDevices.enumerateDevices().then( function(infos) {
+    var count = 0;
+    var curValue = audio_select.options[audio_select.selectedIndex].value;
+    var curValueFound = false;
+    audio_select.disabled = true;
+    audio_select.innerHTML = '';
+    for (var i = 0; i < infos.length; i++) {
+      if (infos[i].kind != 'audiooutput') {
+        continue;
+      }
+      var option = document.createElement("option");
+      option.value = infos[i].deviceId;
+      option.text = infos[i].label;
+      count++;
+      option.text = '' + (count) + ' - ' + option.text + ' ' + infos[i].kind;
+      audio_select.appendChild(option);
+      if (option.value == curValue) {
+        curValueFound = true;
+      }
+    }
+    audio_select.disabled = false;
+    if (selectFirst) {
+      deviceSelected();
+    } else if (curValueFound) {
+      audio_select.value = curValue;
+    }
+  }, function(msg) {
+    alert('Something wrong: ' + msg);
+  });
+}
+
+function deviceSelected(elem, audio_select, sink_label) {
+  var deviceId = null;
+  if (audio_select.options.length > 0) {
+    deviceId = audio_select.options[audio_select.selectedIndex].value;
+    var promise = elem.setSinkId(deviceId);
+    promise.then(function(result) {
+      sink_label.innerHTML = 'Audio output device sink ID is ' + elem.sinkId;
+    }, function(e) {
+      sink_label.innerHTML = 'Audio output device could not be set: ' + e.name + ' - ' + e.message;
+    });
+  } else {
+    alert("No audio devices found");
+  }
+}
+
+function redirect2(elemSrc, elemDest1, elemDest2) {
+  redirect(elemSrc, elemDest1);
+  redirect(elemSrc, elemDest2);
+}
+
+function redirect(elemSrc, elemDest) {
+  console.log("Redirecting " + elemSrc + " to " + elemDest);
+}
+
+function redirect2(elemSrc, elemDest1, elemDest2) {
+  redirect(elemSrc, elemDest1);
+  redirect(elemSrc, elemDest2);
+}
+
+
+</script>
+
+  </body>
+</html>
