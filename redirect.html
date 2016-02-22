@@ -23,7 +23,7 @@
     Change Audio Device: <select id="audiodevice_myredir2" onchange="deviceSelected(myredir2, audio_select_myredir2, sink_label_myredir2)"><option value="invalid"></option></select><br><br>
     <button id="refresh_myredir2" onclick="refreshDeviceList(false, audio_select_myredir2);">Refresh device list</button><br>
 
-    <button id="redirect" onclick="redirect2(myaudio, myredir1, myredir2);">Refresh device list</button><br>
+    <button id="redirect" onclick="redirect2(audioCtx, myaudio, myredir1, myredir2);">Redirect</button><br>
 
 <script>
 var myaudio = null;
@@ -35,6 +35,8 @@ var audio_select_myredir2 = null;
 var sink_label_myaudio = null;
 var sink_label_myredir1 = null;
 var sink_label_myredir2 = null;
+var audioCtx = new AudioContext();
+
 
 window.onload = onLoad;
 
@@ -110,13 +112,18 @@ function deviceSelected(elem, audio_select, sink_label) {
   }
 }
 
-function redirect2(elemSrc, elemDest1, elemDest2) {
-  redirect(elemSrc, elemDest1);
-  redirect(elemSrc, elemDest2);
+function redirect2(ctx, elemSrc, elemDest1, elemDest2) {
+  redirect(ctx, elemSrc, elemDest1);
+  redirect(ctx, elemSrc, elemDest2);
 }
 
-function redirect(elemSrc, elemDest) {
+function redirect(ctx, elemSrc, elemDest) {
   console.log("Redirecting " + elemSrc + " to " + elemDest);
+  srcNode = ctx.createMediaElementSource(elemSrc);
+  destNode = ctx.createMediaStreamDestination();
+  srcNode.connect(destNode);
+  elemDest.src = URL.createObjectURL(destNode.stream);
+  elemDest.play();
 }
 
 function redirect2(elemSrc, elemDest1, elemDest2) {
