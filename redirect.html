@@ -50,7 +50,6 @@ function onLoad() {
   sink_label_myaudio = document.getElementById("sinklabel_myaudio");
   sink_label_myredir1 = document.getElementById("sink_label_myredir1");
   sink_label_myredir2 = document.getElementById("sink_label_myredir2");
-  //video.play();
   navigator.webkitGetUserMedia(
       {audio:true},
       function(stream) {
@@ -125,12 +124,6 @@ function redirect(ctx, elemSrc, elemDest) {
   elemDest.src = URL.createObjectURL(destNode.stream);
   elemDest.play();
 }
-
-function redirect2(elemSrc, elemDest1, elemDest2) {
-  redirect(elemSrc, elemDest1);
-  redirect(elemSrc, elemDest2);
-}
-
 
 </script>
 
