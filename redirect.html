@@ -52,8 +52,9 @@ function onLoad() {
   navigator.webkitGetUserMedia(
       {audio:true},
       function(stream) {
-        refreshDeviceList(true,audio_select_video);
         refreshDeviceList(true,audio_select_myaudio);
+        refreshDeviceList(true,audio_select_myredir1);
+        refreshDeviceList(true,audio_select_myredir2);
         THESTREAM=stream;
         stream.getAudioTracks()[0].stop();
         console.log("stream closed");
