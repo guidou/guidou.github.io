@@ -36,7 +36,6 @@ function clearItems() {
 }
 
 function refreshDeviceList(selectFirst) {
-  clearItems()
   if (!navigator.mediaDevices) {
     addItem('navigator.mediaDevices not supported');
     return;
@@ -46,6 +45,7 @@ function refreshDeviceList(selectFirst) {
     return;
   }
   navigator.mediaDevices.enumerateDevices().then( function(infos) {
+    clearItems();
     var count = 0;
     for (var i = 0; i < infos.length; i++) {
       count++;
