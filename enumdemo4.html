@@ -17,7 +17,7 @@ window.onload = onLoad;
 function onLoad() {
   device_list = document.getElementById("devicelist");
   refreshDeviceList(true,device_list);
-  if (navigator.mediaDevices.ondevicechange) {
+  if ("ondevicechange" in navigator.mediaDevices) {
     console.log("Adding event listener");
     navigator.mediaDevices.ondevicechange = function() { refreshDeviceList(false); };
   }
