@@ -37,6 +37,7 @@ function clearItems() {
 }
 
 var enumcounter = 0;
+var enumresultcounter=0;
 function refreshDeviceList(selectFirst) {
   if (!navigator.mediaDevices) {
     addItem('navigator.mediaDevices not supported');
@@ -49,7 +50,7 @@ function refreshDeviceList(selectFirst) {
 
   console.log("ISSUING ENUMERATION " + enumcounter++);
   navigator.mediaDevices.enumerateDevices().then( function(infos) {
-    console.log("GOT ENUMERATION RESULTS");
+    console.log("GOT ENUMERATION RESULTS " + enumresultcounter++);
     clearItems();
     var count = 0;
     for (var i = 0; i < infos.length; i++) {
