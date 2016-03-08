@@ -19,7 +19,7 @@ function onLoad() {
   refreshDeviceList(true,device_list);
   if ("ondevicechange" in navigator.mediaDevices) {
     console.log("Adding event listener");
-    navigator.mediaDevices.ondevicechange = function() { refreshDeviceList(false); };
+    navigator.mediaDevices.ondevicechange = function() { console.log('GOT DEVICECHANGE EVENT ' + window.devchangecount++); refreshDeviceList(false); };
   }
 }
 
