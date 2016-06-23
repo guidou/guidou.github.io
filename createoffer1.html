@@ -56,13 +56,17 @@ function run(isCallback) {
   var offer_audio = audio_select.options[audio_select.selectedIndex].value;
   var offer_video = video_select.options[video_select.selectedIndex].value;
   var options = {offerToReceiveAudio: offer_audio, offerToReceiveVideo: offer_video};
-  var onOffer = function(offer) {callback_label.value = offer.sdp};
-  var onError = function(error) {promise_label.value = "ERROR: " + error};
+  var label = undefined;
+  var onOffer = function(offer) {label.value = offer.sdp};
+  var onError = function(error) {label.value = "ERROR: " + error};
 
-  if (isCallback)
+  if (isCallback) {
+    label = callback_label;
     pc.createOffer(onOffer, onError, options);
-  else
+  } else {
+    label = promise_label;
     pc.createOffer(options).then(onOffer, onError);
+  }
 }
 
 </script>
