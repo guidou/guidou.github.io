@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>offerToReceieveAudio/Video test</title>
+</head>
+<body>
+  offerToReceiveAudio:
+  <select id="offerAudio">
+    <option value="1">1</option>
+    <option value="0">0</option>
+    <option value="-1">-1</option>
+  </select>
+  offerToReceiveVideo:
+  <select id="offerVideo">
+    <option value="0">0</option>
+    <option value="1">1</option>
+    <option value="-1">-1</option>
+  </select>
+  <table border=1>
+    <tr>
+      <td>
+        <button onclick='runPromiseBased()'>Run promise-based</button><br><br>
+      </td>
+      <td>
+        <button onclick='run(true)'>Run callback-based</button><br><br>
+      </td>
+    </td>
+    <tr>
+      <td>
+        <textarea id="promiselabel" rows=50 cols=80></textarea>
+      </td>
+      <td>
+        <textarea id="callbacklabel" rows=50 cols=80></textarea>
+      </td>
+    </tr>
+  </table>
+
+<script>
+var audio_select = null;
+var video_select = null;
+var promise_label = null;
+var callback_label = null;
+
+window.onload = onLoad;
+
+function onLoad() {
+  audio_select = document.getElementById("offerAudio");
+  video_select = document.getElementById("offerVideo");
+
+  promise_label = document.getElementById("promiselabel");
+  callback_label = document.getElementById("callbacklabel");
+}
+
+function run(isCallback) {
+  var pc = new webkitRTCPeerConnection(null);
+  var offer_audio = audio_select.options[audio_select.selectedIndex].value;
+  var offer_video = video_select.options[video_select.selectedIndex].value;
+  var options = {offerToReceiveAudio: offer_audio, offerToReceiveVideo: offer_video};
+  var onOffer = function(offer) {callback_label.value = offer.sdp};
+  var onError = function(error) {promise_label.value = "ERROR: " + error};
+
+  if (isCallback)
+    pc.createOffer(onOffer, onError, options);
+  else
+    pc.createOffer(options).then(onOffer, onError);
+}
+
+</script>
+
+</body>
+</html>
+
