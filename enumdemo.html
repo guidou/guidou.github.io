@@ -17,7 +17,7 @@ window.onload = onLoad;
 function onLoad() {
   device_list = document.getElementById("devicelist");
   navigator.webkitGetUserMedia(
-      {audio:true},
+      {audio:true, video:true},
       function(stream) {
         stream.getAudioTracks()[0].stop();
         console.log("stream closed");
