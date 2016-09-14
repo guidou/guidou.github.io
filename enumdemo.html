@@ -20,6 +20,7 @@ function onLoad() {
       {audio:true, video:true},
       function(stream) {
         stream.getAudioTracks()[0].stop();
+        stream.getVideoTracks()[0].stop();
         console.log("stream closed");
         refreshDeviceList(true,device_list);
       },
