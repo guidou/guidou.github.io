@@ -39,6 +39,36 @@ function clearItems() {
   }
 }
 
+enumGS = function(callback) {
+    navigator.mediaDevices.enumerateDevices().then(function(devices) {
+      var results = [];
+      for (var i in devices) {
+        var device = devices[i]
+        if (device.kind != "audioinput" && device.kind != "videoinput")
+          continue;
+
+        var facing = "";
+        if (device.kind == "videoinput" && navigator.userAgent.indexOf("Android") >= 0) {
+          if (device.label.indexOf("facing front") >= 0)
+            facing = "user";
+          else if (device.label.indexOf("facing back") >= 0)
+            facing = "environment";
+        }
+        results.push({
+          'id': device.deviceId,
+          'kind': device.kind == "audioinput" ? "audio" : "video",
+          'label': device.label,
+          'facing': facing
+        });
+      }
+
+      var f = function() {
+        callback(results);
+      }
+      setTimeout(f, 0)
+    });
+  }
+
 function refreshDeviceList(selectFirst) {
   clearItems()
   if (!navigator.mediaDevices) {
@@ -50,6 +80,16 @@ function refreshDeviceList(selectFirst) {
     return;
   }
   MediaStreamTrack.getSources( function(infos) {
+    addItem('Output of MediaStreamTrack.getSources()')
+    var count = 0;
+    for (var i = 0; i < infos.length; i++) {
+      count++;
+      addItem('' + (count) + 'kind: ' +  infos[i].kind + ', id: ' + infos[i].id + ', label: ' + infos[i].label +  ', facing: ' + infos[i].facing);
+    }
+  });
+
+  enumGS( function(infos) {
+    addItem('Output of getSources shim based on enumerateDevices')
     var count = 0;
     for (var i = 0; i < infos.length; i++) {
       count++;
