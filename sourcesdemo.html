@@ -62,10 +62,9 @@ enumGS = function(callback) {
         });
       }
 
-      var f = function() {
-        callback(results);
-      }
-      setTimeout(f, 0)
+      callback(results);
+    }, function(e) {
+      throw e;
     });
   }
 
