@@ -43,7 +43,9 @@ async function getUserMedia() {
     await video.play();
     log.textContent = JSON.stringify(options, 0, 2) + '\r\n\r\n';
     log.textContent += 'Result: ' + video.videoWidth + 'x' + video.videoHeight;
-    log.textContent += 'Track settings: ' + video.srcObject.getSettings().width + 'x' + video.srcObject.getSettings().height;
+    log.textContent += 'Track settings: ';
+    var track = video.srcObject.getVideoTracks()[0];
+    log.textContent += track.getSettings().width + 'x' + track.getSettings().height;
   }
 }
 
