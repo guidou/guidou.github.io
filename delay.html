@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+    <h1 id='text'>GUM Request in 5 sec. Please focus another window like "Finder"</h1>
+
+</body>
+</html>
+
+<script>
+window.onload = function() {
+    setTimeout(function(){
+        document.getElementById('text').innerHTML = "GUM done. Now focus this page again. As you can see the GUM request is not showing. If you select another tab in chrome and focus this tab again it wil reapper";
+        navigator.mediaDevices.getUserMedia({audio: true}, s=>{console.log('success: '+s); S=s}, e=>console.log(JSON.stringify(e)));
+    }, 5000);
+}
+</script>
+</html>
