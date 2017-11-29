@@ -55,7 +55,7 @@ function refreshDeviceList(selectFirst) {
     var count = 0;
     for (var i = 0; i < infos.length; i++) {
       count++;
-      addItem('' + (count) + ' - ' +  infos[i].kind + ' - ' + infos[i].deviceId + ' - ' + infos[i].label + ' - ' + infos[i].groupId);
+      addItem('' + (count) + ' - ' +  infos[i].kind + ' - ' + infos[i].deviceId + ' - "' + infos[i].label + '" - ' + infos[i].groupId);
     }
   }, function(msg) {
     alert('Something wrong: ' + msg);
