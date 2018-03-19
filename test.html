@@ -1,0 +1,9 @@
+<input onclick="start()" type="button" value="Click here" />
+
+<script>
+  function start(){
+  navigator.webkitGetUserMedia({audio: true}, function(){}, function(){});
+  setTimeout(function(){document.location = "https://www.google.com"}, 3000)
+  }
+
+  </script>
