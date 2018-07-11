@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>enumeration demo</title>
+  </head>
+  <body>
+    Devices:
+    <ul id="devicelist"></ul>
+    <button id="refresh" onclick="refreshDeviceList(false);">Refresh device list</button><br>
+
+
+<script>
+var device_list = null;
+
+window.onload = onLoad;
+
+function onLoad() {
+  device_list = document.getElementById("devicelist");
+  navigator.webkitGetUserMedia(
+      {audio:true, video:true},
+      function(stream) {
+        stream.getAudioTracks()[0].stop();
+        stream.getVideoTracks()[0].stop();
+        console.log("stream closed");
+        refreshDeviceList(true,device_list);
+      },
+      function(err) {addItem(err + ' ' + err.name + ': ' + err.message);}
+  );
+}
+
+function addItem(strItem) {
+  var item = document.createElement("li");
+  item.innerHTML = strItem;
+  device_list.appendChild(item);
+}
+
+function clearItems() {
+  while (device_list.firstChild ){
+      device_list.removeChild(device_list.firstChild );
+  }
+}
+
+function refreshDeviceList(selectFirst) {
+  clearItems()
+  if (!navigator.mediaDevices) {
+    addItem('navigator.mediaDevices not supported');
+    return;
+  }
+  if (!navigator.mediaDevices.enumerateDevices) {
+    addItem('enumerateDevices not supported');
+    return;
+  }
+  navigator.mediaDevices.enumerateDevices().then( function(infos) {
+    var count = 0;
+    for (var i = 0; i < infos.length; i++) {
+      count++;
+      let frRange = infos[i].getCapabilities().frameRate;
+      addItem('' + (count) + ' - ' +  infos[i].kind + ' - ' + infos[i].deviceId + ' - ' + infos[i].label + ' frame-rate range = [' + frRange.min + ', ' + frRange.max + ']');
+    }
+  }, function(msg) {
+    alert('Something wrong: ' + msg);
+  });
+}
+
+</script>
+
+  </body>
+</html>
