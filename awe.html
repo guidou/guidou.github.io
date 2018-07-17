@@ -19,6 +19,7 @@ function handleSuccess(stream) {
   log('deviceId = ' + settings.deviceId);
   log('facingMod = ' + settings.facingMode);
   log('trackId = ' + stream.getVideoTracks()[0].id);
+  log('settings = ' + settings);
 }
 function handleError(error) {
   console.log('getUserMedia error: ', error);
