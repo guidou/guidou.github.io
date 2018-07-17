@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>simple getUserMedia test page</title>
+</head>
+<body>
+<video autoplay playsinline></video>
+<div id="div"></div>
+<script>
+let nlog = 0;
+let log = msg => div.innerHTML += ++nlog + ". " + msg + "<br>";
+
+function handleSuccess(stream) {
+  video.srcObject = stream;
+  log('gumSuccess');
+  let settings = stream.getVideoTracks()[0].getSettings();
+  log('deviceId = ' + settings.deviceId);
+  log('facingMod = ' + settings.facingMode);
+  log('trackId = ' + stream.getVideoTracks()[0].id);
+}
+function handleError(error) {
+  console.log('getUserMedia error: ', error);
+}
+var constraints = {
+  video:{ facingMode:'environment' } 
+};
+var video = document.querySelector('video');
+navigator.mediaDevices.getUserMedia(constraints).then(handleSuccess).catch(handleError);
+</script>
+</body>
+</html><!DOCTYPE html>
+<meta charset="utf-8">
+<!-- DO NOT SUBMIT: Fix Page Title. Missing tags? http://go/optional-html -->
+<title>Page Title</title>
