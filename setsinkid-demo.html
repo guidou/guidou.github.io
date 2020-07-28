@@ -18,8 +18,8 @@
     <label id="sinklabel_myaudio"></label><br><br>
     Change Audio Device: <select id="audiodevice_myaudio" onchange="deviceSelected(myaudio, audio_select_myaudio, sink_label_myaudio)"><option value="invalid"></option></select><br><br>
     <button id="refresh_myaudio" onclick="refreshDeviceList(false, audio_select_myaudio);">Refresh device list</button><br>
-    <button onclick='myaudio.setSinkId("")'>Change to default device</button><br><br>
-    <button onclick='myaudio.setSinkId("invalid")'>Change to invalid device</button><br><br>
+    <button onclick='myaudio.setSinkId("").then(()=>{}, e=>console.log(e))'>Change to default device</button><br><br>
+    <button onclick='myaudio.setSinkId("invalid").then(()=>{}, e=>console.log(e))'>Change to invalid device</button><br><br>
 
 
 <script>
