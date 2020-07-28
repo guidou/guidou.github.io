@@ -15,8 +15,20 @@ var devchangecount = 0;
 
 window.onload = onLoad;
 
+async function requestPermission() {
+  try {
+    let stream = await navigator.mediaDevices.getUserMedia({audio:true});
+    stream.getTracks()[0].stop();
+    stream = await navigator.mediaDevices.getUserMedia({video:true});
+    stream.getTracks()[0].stop();
+  } catch(e) {
+    console.err("FAILED: " + e.name + ", " + JSON.stringify(e));
+  }
+}
+
 function onLoad() {
   device_list = document.getElementById("devicelist");
+  await requestPermission();
   refreshDeviceList(true,device_list);
   if ("ondevicechange" in navigator.mediaDevices) {
     console.log("Adding event listener");
