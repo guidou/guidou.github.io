@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+<video width=200 height=200>
+</video>
+<script>
+  navigator.mediaDevices.getUserMedia({ video: {
+      facingMode: { ideal: 'environment' },
+    }, audio: false })
+    .then(function(stream) {
+      stream.addEventListener('inactive', () => {
+        console.log("STREAM TURNED INACTIVE");
+      })
+      const video = document.querySelector('video');
+      video.srcObject = stream;
+      video.muted = true;
+      video.onloadedmetadata = function(e) {
+        video.play();
+        navigator.mediaDevices.enumerateDevices().then(devices => {
+          console.log('GOT DEVICES', devices)
+        });
+      };
+    })
+    .catch(function(err) {
+      console.error(err);
+    });
+</script>
+</body>
+</html>
