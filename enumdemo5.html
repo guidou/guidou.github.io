@@ -53,7 +53,10 @@ function refreshDeviceList(selectFirst) {
   }
   navigator.mediaDevices.enumerateDevices().then( function(infos) {
     for (let i = 0; i < infos.length; i++) {
-      let devItem = addItem('kind: ' +  infos[i].kind + ' - deviceId: ' + infos[i].deviceId + ' - label: ' + infos[i].label + ' - groupId: ' + infos[i].groupId);
+      let devItem = addItem('kind: ' +  infos[i].kind + 
+          ' - deviceId: ' + infos[i].deviceId + 
+          ' - label: ' + infos[i].label + 
+          ' - groupId: ' + infos[i].groupId);
       if (infos[i].getCapabilities) {
         let capList = document.createElement('ul');
         let capItem = document.createElement('li');
