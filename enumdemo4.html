@@ -5,8 +5,8 @@
   </head>
   <body>
     Devices:
-    <ul id="devicelist"></ul>
-    <button id="refresh" onclick="refreshDeviceList(false);">Refresh device list</button><br>
+    <ol id="devicelist"></ol>
+    <button id="refresh" onclick="refreshDeviceList();">Refresh device list</button><br>
 
 
 <script>
@@ -49,7 +49,7 @@ function clearItems() {
 
 let enumcounter = 0;
 let enumresultcounter=0;
-function refreshDeviceList(selectFirst) {
+function refreshDeviceList() {
   if (!navigator.mediaDevices) {
     addItem('navigator.mediaDevices not supported');
     return;
@@ -64,8 +64,7 @@ function refreshDeviceList(selectFirst) {
     console.log("GOT ENUMERATION RESULTS " + enumresultcounter++);
     clearItems();
     for (let i = 0; i < infos.length; i++) {
-      addItem('' + (i+1) + ' - ' +  
-          infos[i].kind + ' - ' + 
+      addItem(infos[i].kind + ' - ' + 
           infos[i].deviceId + ' - "' + 
           infos[i].label + '" - ' + 
           infos[i].groupId);
