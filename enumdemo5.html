@@ -16,8 +16,8 @@ window.onload = onLoad;
 
 function onLoad() {
   device_list = document.getElementById("devicelist");
-  navigator.webkitGetUserMedia(
-      {audio:true, video:true},
+  navigator.mediaDevices.getUserMedia(
+      {audio:true, video:true}).then(
       function(stream) {
         stream.getAudioTracks()[0].stop();
         stream.getVideoTracks()[0].stop();
@@ -51,10 +51,8 @@ function refreshDeviceList(selectFirst) {
     return;
   }
   navigator.mediaDevices.enumerateDevices().then( function(infos) {
-    var count = 0;
-    for (var i = 0; i < infos.length; i++) {
-      count++;
-      addItem('' + (count) + ' - ' +  infos[i].kind + ' - ' + infos[i].deviceId + ' - ' + infos[i].label);
+    for (let i = 0; i < infos.length; i++) {
+      addItem('' + (i+1) + ' - kind: ' +  infos[i].kind + ' - deviceId: ' + infos[i].deviceId + ' - label: ' + infos[i].label + ' - groupId: ' infos[i].groupId);
       if (infos[i].getCapabilities)
         addItem('' + JSON.stringify(infos[i].getCapabilities()));
       addItem('');

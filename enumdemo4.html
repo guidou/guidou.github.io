@@ -28,8 +28,7 @@ async function requestPermission() {
 
 function onLoad() {
   device_list = document.getElementById("devicelist");
-  await requestPermission();
-  refreshDeviceList(true,device_list);
+  requestPermission().then(() => refreshDeviceList(true,device_list);
   if ("ondevicechange" in navigator.mediaDevices) {
     console.log("Adding event listener");
     navigator.mediaDevices.ondevicechange = function() { console.log('GOT DEVICECHANGE EVENT ' + devchangecount++); refreshDeviceList(false); };
@@ -48,8 +47,8 @@ function clearItems() {
   }
 }
 
-var enumcounter = 0;
-var enumresultcounter=0;
+let enumcounter = 0;
+let enumresultcounter=0;
 function refreshDeviceList(selectFirst) {
   if (!navigator.mediaDevices) {
     addItem('navigator.mediaDevices not supported');
@@ -64,10 +63,12 @@ function refreshDeviceList(selectFirst) {
   navigator.mediaDevices.enumerateDevices().then( function(infos) {
     console.log("GOT ENUMERATION RESULTS " + enumresultcounter++);
     clearItems();
-    var count = 0;
-    for (var i = 0; i < infos.length; i++) {
-      count++;
-      addItem('' + (count) + ' - ' +  infos[i].kind + ' - ' + infos[i].deviceId + ' - "' + infos[i].label + '" - ' + infos[i].groupId);
+    for (let i = 0; i < infos.length; i++) {
+      addItem('' + (i+1) + ' - ' +  
+          infos[i].kind + ' - ' + 
+          infos[i].deviceId + ' - "' + 
+          infos[i].label + '" - ' + 
+          infos[i].groupId);
     }
   }, function(msg) {
     alert('Something wrong: ' + msg);
