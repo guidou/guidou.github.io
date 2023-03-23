@@ -60,7 +60,7 @@ function refreshDeviceList(selectFirst) {
       if (infos[i].getCapabilities) {
         let capList = document.createElement('ul');
         let capItem = document.createElement('li');
-        capItem.innerHTML = JSON.stringify(infos[i].getCapabilities());
+        capItem.innerHTML = JSON.stringify(infos[i].getCapabilities(), null, 2);
         capList.appendChild(capItem);
         devItem.appendChild(capList);
       }
