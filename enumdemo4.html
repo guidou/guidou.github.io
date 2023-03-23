@@ -28,7 +28,7 @@ async function requestPermission() {
 
 function onLoad() {
   device_list = document.getElementById("devicelist");
-  requestPermission().then(() => refreshDeviceList(true,device_list);
+  requestPermission().then(() => refreshDeviceList(true,device_list));
   if ("ondevicechange" in navigator.mediaDevices) {
     console.log("Adding event listener");
     navigator.mediaDevices.ondevicechange = function() { console.log('GOT DEVICECHANGE EVENT ' + devchangecount++); refreshDeviceList(false); };
