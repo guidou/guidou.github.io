@@ -5,7 +5,7 @@
   </head>
   <body>
     Devices:
-    <ul id="devicelist"></ul>
+    <ol id="devicelist"></ol>
     <button id="refresh" onclick="refreshDeviceList(false);">Refresh device list</button><br>
 
 
@@ -32,6 +32,7 @@ function addItem(strItem) {
   var item = document.createElement("li");
   item.innerHTML = strItem;
   device_list.appendChild(item);
+  return item;
 }
 
 function clearItems() {
@@ -52,11 +53,14 @@ function refreshDeviceList(selectFirst) {
   }
   navigator.mediaDevices.enumerateDevices().then( function(infos) {
     for (let i = 0; i < infos.length; i++) {
-      addItem('' + (i+1) + ' - kind: ' +  infos[i].kind + ' - deviceId: ' + infos[i].deviceId + ' - label: ' + infos[i].label + ' - groupId: ' infos[i].groupId);
-      if (infos[i].getCapabilities)
-        addItem('' + JSON.stringify(infos[i].getCapabilities()));
-      addItem('');
-
+      let devItem = addItem('kind: ' +  infos[i].kind + ' - deviceId: ' + infos[i].deviceId + ' - label: ' + infos[i].label + ' - groupId: ' + infos[i].groupId);
+      if (infos[i].getCapabilities) {
+        let capList = document.createElement('ul');
+        let capItem = document.createElement('li');
+        capItem.innerHTML = JSON.stringify(infos[i].getCapabilities());
+        capList.appendChild(capItem);
+        devItem.appendChild(capList);
+      }
     }
   }, function(msg) {
     alert('Something wrong: ' + msg);
