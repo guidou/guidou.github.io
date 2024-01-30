@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>enumeration demo</title>
+    <title>Camera enumeration demo</title>
   </head>
   <body>
     Devices:
     <ol id="devicelist"></ol>
-    <button id="refresh" onclick="refreshDeviceList();">Refresh device list</button><br>
+    <button id="refresh" onclick="refreshDeviceList();">Refresh camera list</button><br>
 
 
 <script>
@@ -18,15 +18,18 @@ let i=0;
 function onLoad() {
   device_list = document.getElementById("devicelist");
   navigator.mediaDevices.getUserMedia(
-      {audio:true, video:true}).then(
+      {video:true}).then(
       function(stream) {
-        stream.getAudioTracks()[0].stop();
         stream.getVideoTracks()[0].stop();
         console.log("stream closed");
         refreshDeviceList();
       },
       function(err) {addItem(err + ' ' + err.name + ': ' + err.message);}
   );
+  navigator.mediaDevices.ondevicechange = () => {
+    console.log("devicechange event detected: ", ++i);
+    refreshDeviceList();
+  }
 }
 
 function addItem(strItem) {
@@ -59,6 +62,9 @@ function refreshDeviceList() {
     clearItems();
 
     for (let i = 0; i < infos.length; i++) {
+      if (infos[i].kind != "videoinput") {
+        continue;
+      }
       let devItem = addItem(infos[i].kind + 
           ' - ' + infos[i].deviceId + 
           ' - ' + infos[i].label + 
