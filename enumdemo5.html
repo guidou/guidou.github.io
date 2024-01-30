@@ -14,6 +14,7 @@ var device_list = null;
 
 window.onload = onLoad;
 
+let i=0;
 function onLoad() {
   device_list = document.getElementById("devicelist");
   navigator.mediaDevices.getUserMedia(
@@ -26,7 +27,10 @@ function onLoad() {
       },
       function(err) {addItem(err + ' ' + err.name + ': ' + err.message);}
   );
-  navigator.mediaDevices.ondevicechange = refreshDeviceList;
+  navigator.mediaDevices.ondevicechange = () => {
+    console.log("devicechange event detected: ", ++i);
+    refreshDeviceList();
+  }
 }
 
 function addItem(strItem) {
@@ -46,7 +50,7 @@ function clearItems() {
 }
 
 function refreshDeviceList() {
-  clearItems()
+  clearItems();
   if (!navigator.mediaDevices) {
     addItem('navigator.mediaDevices not supported');
     return;
@@ -56,9 +60,7 @@ function refreshDeviceList() {
     return;
   }
   navigator.mediaDevices.enumerateDevices().then( function(infos) {
-    if (!device_list) {
-      device_list = document.getElementById("devicelist");
-    }
+    clearItems();
 
     for (let i = 0; i < infos.length; i++) {
       let devItem = addItem(infos[i].kind + 
