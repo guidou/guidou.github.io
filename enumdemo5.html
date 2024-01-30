@@ -37,6 +37,9 @@ function addItem(strItem) {
 }
 
 function clearItems() {
+  if (!device_list) {
+    device_list = document.getElementById("devicelist");
+  }
   while (device_list.firstChild ){
       device_list.removeChild(device_list.firstChild );
   }
@@ -53,6 +56,10 @@ function refreshDeviceList() {
     return;
   }
   navigator.mediaDevices.enumerateDevices().then( function(infos) {
+    if (!device_list) {
+      device_list = document.getElementById("devicelist");
+    }
+
     for (let i = 0; i < infos.length; i++) {
       let devItem = addItem(infos[i].kind + 
           ' - ' + infos[i].deviceId + 
