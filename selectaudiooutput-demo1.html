@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>selectAudioOutput, enumerateDevices and setSinkId demo</title>
+  </head>
+  <body>
+    <!-- OGV video:
+    <video id='video' src='STS-134_launch_2.ogv.160p.ogv' width='150' height='100'></video><br>
+    <button onclick='video.paused ? video.play() : video.pause()'>Play/Pause</button><br><br> -->
+    <label id="sinklabel"></label><br><br>
+    <!-- Change Audio Device: <select id="audiodevice" onchange="deviceSelected(video, audio_select_video, sink_label_video)"><option value="invalid"></option></select><br><br> -->
+    <!-- <button id="refresh" onclick="refreshDeviceList(false, audio_select_video);">Refresh device list</button><br> -->
+    <!-- <button id="setdefault" onclick="video.setSinkId('');">Set default sinkId</button><br> -->
+
+    <br><br><br>MP3 audio:
+    <audio id='myaudio' src='Audiobeast.mp3'></audio><br>
+    <button onclick='selectAndPlay()'>Play</button>
+    <button onclick='myaudio.pause()'>Pause</button><br><br>
+    <label id="sinklabel_myaudio"></label><br><br>
+    <!-- Change Audio Device: <select id="audiodevice_myaudio" onchange="deviceSelected(myaudio, audio_select_myaudio, sink_label_myaudio)"><option value="invalid"></option></select><br><br> -->
+    <button id="refresh_myaudio" onclick="refreshDeviceList(false, audio_select_myaudio);">Refresh device list</button><br>
+    <ul id="devicelist"></ul>
+    <!-- <button onclick='myaudio.setSinkId("").then(()=>{}, e=>console.log(e))'>Change to default device</button><br><br> -->
+    <!-- <button onclick='myaudio.setSinkId("invalid").then(()=>{}, e=>console.log(e))'>Change to invalid device</button><br><br> -->
+
+
+<script>
+var video = null;
+var myaudio = null;
+var audio_select_video = null;
+var audio_select_myaudio = null;
+var sink_label_video = null;
+var sink_label_myaudio = null;
+var device_list = null;
+
+window.onload = onLoad;
+
+
+async function selectAndPlay() {
+  let deviceInfo = null;
+  try {
+    if (!navigator.mediaDevices.selectAudioOutput) {
+      alert("selectAudioOutput not supported");
+      return;
+    }
+    deviceInfo = await navigator.mediaDevices.selectAudioOutput();
+    console.log("deviceInfo: ", deviceInfo);
+    
+    console.log('calling setSinkId on ', myaudio)
+    await myaudio.setSinkId(deviceInfo.deviceId);
+    console.log("setSinkId() was successful");
+
+    await myaudio.play();
+    console.log("play() was successful");
+  } catch (e) {
+    console.log('exception: ', e)
+    alert("There was a problem. ", e.name, ": ", e.message);
+  }
+}
+
+function onLoad() {
+  audio_select_video = document.getElementById("audiodevice");
+  audio_select_myaudio = document.getElementById("audiodevice_myaudio");
+  video = document.getElementById("video");
+  myaudio = document.getElementById("myaudio");
+  sink_label_video = document.getElementById("sinklabel");
+  sink_label_myaudio = document.getElementById("sinklabel_myaudio");
+  device_list = document.getElementById("devicelist");
+
+  //video.play();
+  // navigator.webkitGetUserMedia(
+  //     {audio:true},
+  //     function(stream) {
+  //       refreshDeviceList(true,audio_select_video);
+  //       refreshDeviceList(true,audio_select_myaudio);
+  //       THESTREAM=stream;
+  //       stream.getAudioTracks()[0].stop();
+  //       console.log("stream closed");
+  //     },
+  //     function(err) {alert(err);}
+  // );
+}
+
+function addItem(strItem) {
+  var item = document.createElement("li");
+  item.innerHTML = strItem;
+  device_list.appendChild(item);
+}
+
+function clearItems() {
+  while (device_list.firstChild ){
+      device_list.removeChild(device_list.firstChild );
+  }
+}
+
+function refreshDeviceList(selectFirst) {
+  clearItems()
+  if (!navigator.mediaDevices) {
+    addItem('navigator.mediaDevices not supported');
+    return;
+  }
+  if (!navigator.mediaDevices.enumerateDevices) {
+    addItem('enumerateDevices not supported');
+    return;
+  }
+  navigator.mediaDevices.enumerateDevices().then( function(infos) {
+    var count = 0;
+    for (var i = 0; i < infos.length; i++) {
+      count++;
+      addItem('' + (count) + ' - ' +  infos[i].kind + ' - ' + infos[i].deviceId + ' - ' + infos[i].label);
+    }
+  }, function(msg) {
+    alert('Something wrong: ' + msg);
+  });
+}
+
+
+// function deviceSelected(elem, audio_select, sink_label) {
+//   var deviceId = null;
+//   if (audio_select.options.length > 0) {
+//     deviceId = audio_select.options[audio_select.selectedIndex].value;
+//     var promise = elem.setSinkId(deviceId);
+//     promise.then(function(result) {
+//       sink_label.innerHTML = 'Audio output device sink ID is ' + elem.sinkId;
+//     }, function(e) {
+//       sink_label.innerHTML = 'Audio output device could not be set: ' + e.name + ' - ' + e.message;
+//     });
+//   } else {
+//     alert("No audio devices found");
+//   }
+// }
+
+</script>
+
+  </body>
+</html>
