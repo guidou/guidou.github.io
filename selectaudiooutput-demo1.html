@@ -7,18 +7,20 @@
     <!-- OGV video:
     <video id='video' src='STS-134_launch_2.ogv.160p.ogv' width='150' height='100'></video><br>
     <button onclick='video.paused ? video.play() : video.pause()'>Play/Pause</button><br><br> -->
-    <label id="sinklabel"></label><br><br>
+    <!-- <label id="sinklabel"></label><br><br> -->
     <!-- Change Audio Device: <select id="audiodevice" onchange="deviceSelected(video, audio_select_video, sink_label_video)"><option value="invalid"></option></select><br><br> -->
     <!-- <button id="refresh" onclick="refreshDeviceList(false, audio_select_video);">Refresh device list</button><br> -->
     <!-- <button id="setdefault" onclick="video.setSinkId('');">Set default sinkId</button><br> -->
 
-    <br><br><br>MP3 audio:
+    <!-- <br><br> -->
+    <br>MP3 audio:
     <audio id='myaudio' src='Audiobeast.mp3'></audio><br>
     <button onclick='selectAndPlay()'>Play</button>
-    <button onclick='myaudio.pause()'>Pause</button><br><br>
+    <button onclick='callPause()'>Pause</button><br><br>
     <label id="sinklabel_myaudio"></label><br><br>
     <!-- Change Audio Device: <select id="audiodevice_myaudio" onchange="deviceSelected(myaudio, audio_select_myaudio, sink_label_myaudio)"><option value="invalid"></option></select><br><br> -->
-    <button id="refresh_myaudio" onclick="refreshDeviceList(false, audio_select_myaudio);">Refresh device list</button><br>
+    <button id="callgum" onclick="callGum();">Request Microphone Permission</button><br><br>
+    <button id="refresh_myaudio" onclick="refreshDeviceList(false, audio_select_myaudio);">Enumerate Devices</button><br>
     <ul id="devicelist"></ul>
     <!-- <button onclick='myaudio.setSinkId("").then(()=>{}, e=>console.log(e))'>Change to default device</button><br><br> -->
     <!-- <button onclick='myaudio.setSinkId("invalid").then(()=>{}, e=>console.log(e))'>Change to invalid device</button><br><br> -->
@@ -35,6 +37,22 @@ var device_list = null;
 
 window.onload = onLoad;
 
+async function callPause() {
+  myaudio.pause();
+  sink_label_myaudio.innerHTML = "Paused";
+}
+
+async function callGum() {
+  try {
+    console.log("Calling gUM");
+    let stream = await navigator.mediaDevices.getUserMedia({audio:true});
+    console.log("stream = ", stream);
+    stream.getAudioTracks()[0].stop();
+  } catch(e) {
+    console.log("gUM failed: ", e);
+    alert('Microphone permission not given');
+  }
+}
 
 async function selectAndPlay() {
   let deviceInfo = null;
@@ -52,9 +70,11 @@ async function selectAndPlay() {
 
     await myaudio.play();
     console.log("play() was successful");
+
+    sink_label_myaudio.innerHTML = "Playing on " + deviceInfo.label;
   } catch (e) {
     console.log('exception: ', e)
-    alert("There was a problem. ", e.name, ": ", e.message);
+    alert("No output device selected");
   }
 }
 
