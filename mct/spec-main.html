@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>mediacapture-transform.html preview demo</title>
+  </head>
+  <body>
+    <table>
+      <tr>
+        <th>Before</th>
+        <th>After</th>
+      </tr>
+      <tr>
+        <td><video id='original-video'></video></td>
+        <td><video id='processed-video'></video></td>
+      </tr>
+    </table>
+    <br>
+    <button onclick='startCapture()'>StartCapture</button><br>
+    <button onclick='stopCapture()'>Stop capture</button><br>
+    <br>
+    <br>
+    <label id="message-label"></label><br>
+
+    <script>
+let originalVideo = null;
+let processedVideo = null;
+let messageLabel = null;
+let worker = null;
+let track = null;
+
+window.onload = onLoad;
+
+function updateStatus(newStatus) {
+  messageLabel.innerHTML = newStatus;
+}
+
+function onLoad() {
+  originalVideo = document.getElementById("original-video");
+  processedVideo = document.getElementById("processed-video");
+  messageLabel = document.getElementById("message-label");
+  worker = new Worker("spec-worker.js");
+
+  worker.onmessage = async event => {
+    if (event.data.command == "processed-track") {
+      let stream = new MediaStream([event.data.param]);
+      processedVideo.srcObject = stream;
+      await processedVideo.play()
+      updateStatus("Processing track");
+    } else if (event.data.command == "stopped-track") {
+      track.stop();
+      updateStatus("Stopped track");
+    }
+  }
+}
+
+async function startCapture() {
+  try {
+    let stream = await navigator.mediaDevices.getUserMedia({video:{width:640, height:480}});
+    originalVideo.srcObject = stream;
+    await originalVideo.play()
+    track = stream.getVideoTracks()[0];
+    let cloneTrack = track.clone();
+    updateStatus("Capture successful");
+    worker.postMessage({command: "process-track", param: cloneTrack}, [cloneTrack]);
+  } catch(e) {
+    updateStatus("startCapture failed: " + e.name + ' ' + e.message);
+  }
+}
+
+function stopCapture() {
+  worker.postMessage({command: "stop-track"}, [track]);
+  updateStatus("Stopping capture");
+}
+    </script>
+  </body>
+</html>

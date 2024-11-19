@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>mediacapture-transform.html preview demo</title>
+  </head>
+  <body>
+    <table>
+      <tr>
+        <th>Before</th>
+        <th>After</th>
+      </tr>
+      <tr>
+        <td><video id='original-video'></video></td>
+        <td><video id='processed-video'></video></td>
+      </tr>
+    </table>
+    <br>
+    <button onclick='startCapture()'>StartCapture</button><br>
+    <button onclick='stopCapture()'>Stop capture</button><br>
+    <br>
+    <br>
+    <label id="message-label"></label><br>
+
+    <script>
+let originalVideo = null;
+let processedVideo = null;
+let messageLabel = null;
+let worker = null;
+let track = null;
+let processedTrack = null;
+
+window.onload = onLoad;
+
+function updateStatus(newStatus) {
+  messageLabel.innerHTML = newStatus;
+}
+
+function onLoad() {
+  originalVideo = document.getElementById("original-video");
+  processedVideo = document.getElementById("processed-video");
+  messageLabel = document.getElementById("message-label");
+  worker = new Worker("chrome-worker.js");
+}
+
+async function startCapture() {
+  try {
+    let stream = await navigator.mediaDevices.getUserMedia({video:true});
+    originalVideo.srcObject = stream;
+    await originalVideo.play();
+    track = stream.getVideoTracks()[0];
+    updateStatus("Capture successful");
+    processedTrack = MediaDevices.createVideoTrackGeneratorAndProcessor(worker, track);
+    processedVideo.srcObject = new MediaStream([processedTrack]);
+    await processedVideo.play();
+  } catch(e) {
+    updateStatus("startCapture failed: " + e.name + ' ' + e.message);
+  }
+}
+
+function stopCapture() {
+  track.stop();
+  processedTrack.stop();
+  updateStatus("Stopped track");
+}
+    </script>
+  </body>
+</html>
