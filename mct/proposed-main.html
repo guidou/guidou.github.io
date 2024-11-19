@@ -39,7 +39,7 @@ function onLoad() {
   originalVideo = document.getElementById("original-video");
   processedVideo = document.getElementById("processed-video");
   messageLabel = document.getElementById("message-label");
-  worker = new Worker("chrome-worker.js");
+  worker = new Worker("proposed-worker.js");
 }
 
 async function startCapture() {
