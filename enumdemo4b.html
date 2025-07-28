@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>enumeration demo</title>
+  </head>
+  <body>
+    Devices:
+    <ol id="devicelist"></ol>
+    <button id="refresh" onclick="refreshDeviceList();">Refresh device list</button><br>
+
+
+<script>
+var device_list = null;
+var devchangecount = 0;
+
+window.onload = onLoad;
+
+async function requestPermission() {
+  try {
+    let stream = await navigator.mediaDevices.getUserMedia({video:true});
+    stream.getTracks()[0].stop();
+  } catch(e) {
+    console.err("FAILED: " + e.name + ", " + JSON.stringify(e));
+  }
+}
+
+function onLoad() {
+  device_list = document.getElementById("devicelist");
+  requestPermission().then(() => refreshDeviceList(true,device_list));
+  if ("ondevicechange" in navigator.mediaDevices) {
+    console.log("Adding event listener");
+    navigator.mediaDevices.ondevicechange = function() { console.log('GOT DEVICECHANGE EVENT ' + devchangecount++); refreshDeviceList(false); };
+  }
+}
+
+function addItem(strItem) {
+  var item = document.createElement("li");
+  item.innerHTML = strItem;
+  device_list.appendChild(item);
+}
+
+function clearItems() {
+  while (device_list.firstChild ){
+      device_list.removeChild(device_list.firstChild );
+  }
+}
+
+let enumcounter = 0;
+let enumresultcounter=0;
+function refreshDeviceList() {
+  if (!navigator.mediaDevices) {
+    addItem('navigator.mediaDevices not supported');
+    return;
+  }
+  if (!navigator.mediaDevices.enumerateDevices) {
+    addItem('enumerateDevices not supported');
+    return;
+  }
+
+  console.log("ISSUING ENUMERATION " + enumcounter++);
+  navigator.mediaDevices.enumerateDevices().then( function(infos) {
+    console.log("GOT ENUMERATION RESULTS " + enumresultcounter++);
+    clearItems();
+    for (let i = 0; i < infos.length; i++) {
+      addItem(infos[i].kind + ' - ' + 
+          infos[i].deviceId + ' - "' + 
+          infos[i].label + '" - ' + 
+          infos[i].groupId);
+    }
+  }, function(msg) {
+    alert('Something wrong: ' + msg);
+  });
+}
+
+</script>
+
+  </body>
+</html>
