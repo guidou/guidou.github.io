@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Microphone Audio Level</title>
+  <style>
+    #level {
+      width: 100px;
+      height: 20px;
+      border: 1px solid black;
+    }
+    #level-bar {
+      width: 0%;
+      height: 100%;
+      background-color: green;
+    }
+  </style>
+</head>
+<body>
+  <h1>Microphone Audio Level</h1>
+  <button id="start">Start</button>
+  <div id="level"><div id="level-bar"></div></div>
+  <p>Average Level: <span id="avg-level">0</span></p>
+
+  <script src="mediastreamtrackprocessor.js"></script>
+  <script src="main.js"></script>
+</body>
+</html>
