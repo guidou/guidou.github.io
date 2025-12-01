@@ -40,7 +40,7 @@ startButton.addEventListener('click', async () => {
           sum += Math.abs(buffer[i]);
           sampleCount++;
 
-          if (sampleCount >= 10000) {
+          if (sampleCount >= 100000) {
             const average = sum / sampleCount;
             avgLevel.textContent = average.toFixed(4);
             levelBar.style.width = `${average * 400}%`; // Scale for visibility
