@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>MediaStreamTrackProcessor/MediaStreamTrackGenerator Latency Demo</title>
+    <style>
+        body { font-family: sans-serif; text-align: center; margin-top: 50px; }
+        #latencyGraph { border: 1px solid #ccc; margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <h1>MediaStreamTrackProcessor/MediaStreamTrackGenerator Latency Demo</h1>
+    <div id="description" style="text-align: left; max-width: 900px; margin: 0 auto;">
+        <p>This is a demo of using MediaStreamTrackProcessor (MSTP)/MediaStreamTrackGenerator (MSTG)
+        to process an audio MediaStream that is to be sent between two PeerConnections to be
+        rendered at the other end.</p>
+        
+        <div style="font-family: monospace; background: #f4f4f4; padding: 10px; border-radius: 4px; overflow-x: auto; font-size: 0.7em; white-space: pre;">
+ConstantSource -> AW1 (add signature) -> MediaStreamDestination -> MSTP -> Processing -> MSTG --+-> PC1 -> PC2 -> MediaStreamSource -> AW2
+        </div>
+
+        <ul>
+            <li>On the input side WebAudio is used to generate a constant audio source
+                which is connected to an AudioWorklet (AW1) which periodically adds a short
+                sine-wave as a signature (this signature is later detected on the render-side
+                so that the latency can be measured).
+            </li>
+            <li>The input signal produced by WebAudio is put into a MediaStreamTrack via a
+                MediaStreamDestination. This track is processed using either 1) a
+                MediaStreamTrackProcessor/Transformer/MediaStreamTrackGenerator or 2) a
+                MediaStreamTrackProcessor/Transformer/ShimMediaStreamTrackGenerator pipeline.
+                Processing is passthrough, except that 3, 6 and 9 seconds after the pipeline
+                starts, delays of 100ms, 200ms, and 300ms are added respectively. 
+            </li>
+            <li>The output signal from the pipeline is sent through a pair of local
+                RTCPeerConnections (PC1 and PC2).
+            </li>
+            <li>The track from the receiving RTCPeerConnection (PC2) is connected to WebAudio
+                to render it. The WebAudio AudioContext also has an AudioWorklet (AW2) to detect
+                the signature added by AW1 and measure the end-to-end latency.
+            </li>
+        </ul>
+        
+        <p>Processing occurs on the main thread. If the browser does not support
+        MediaStreamTrackProcessor for audio on the main thread, 
+        <a href="https://jan-ivar.github.io/polyfills/mediastreamtrackprocessor.js">Jan-Ivar's
+            MediaStreamTrackProcesor polyfill</a> is used instead.</p>
+
+        <p>ShimMediaStreamTrackGenerator is 
+        <a href="https://jan-ivar.github.io/polyfills/mediastreamtrackgenerator.js">Jan-Ivar's
+             MediaStreamTrackGenerator polyfill</a>
+        renamed so that it can be used alongside the native MediaStreamTrackGenerator.</p>
+
+        <p>This demo is based on
+            <a href="https://stefanholmer.github.io/mstp_awp_latency_demo/">this
+            other demo by Stefan.</a>
+        </p>
+    </div>
+    <button id="startButton">Start Demo</button>
+    <div>
+        <input type="checkbox" id="useShim" name="useShim" checked>
+        <label for="useShim">Shim MediaStreamTrackGenerator (uses AudioWorklet)</label>
+        <input type="checkbox" id="useNative" name="useNative">
+        <label for="useNative">Native MediaStreamTrackProcessor</label>
+    </div>
+    <div id="graphsContainer" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; margin-top: 20px;">
+        <div id="shimGraphContainer" style="display: none;">
+            <h3>AudioWorklet-based ShimMediaStreamTrackGenerator</h3>
+            <canvas id="shimGraph" width="600" height="300" style="border: 1px solid #ccc;"></canvas>
+        </div>
+        <div id="nativeGraphContainer" style="display: none;">
+            <h3>Native MediaStreamTrackGenerator</h3>
+            <canvas id="nativeGraph" width="600" height="300" style="border: 1px solid #ccc;"></canvas>
+        </div>
+    </div>
+    <script src="smstg.js"></script>
+    <script src="main.js"></script>
+</body>
+</html>
