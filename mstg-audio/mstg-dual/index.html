@@ -57,10 +57,19 @@ ConstantSource -> AW1 (add signature) -> MediaStreamDestination -> MSTP -> Proce
     </div>
     <button id="startButton">Start Demo</button>
     <div>
-        <input type="checkbox" id="useShim" name="useShim" checked>
-        <label for="useShim">Shim MediaStreamTrackGenerator (uses AudioWorklet)</label>
-        <input type="checkbox" id="useNative" name="useNative">
-        <label for="useNative">Native MediaStreamTrackProcessor</label>
+        <fieldset>
+        <!-- <legend>Choose your option:</legend> -->
+
+        <div>
+            <input type="radio" id="option1" name="myOptions" value="useShim" checked>
+            <label for="option1">Shim MediaStreamTrackGenerator (uses AudioWorklet)</label>
+        </div>
+
+        <div>
+            <input type="radio" id="option2" name="myOptions" value="useNative">
+            <label for="option2">Native MediaStreamTrackGenerator</label>
+        </div>
+        </fieldset>
     </div>
     <div id="graphsContainer" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; margin-top: 20px;">
         <div id="shimGraphContainer" style="display: none;">

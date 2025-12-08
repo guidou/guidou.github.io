@@ -221,19 +221,23 @@ class Pipeline {
 async function startDemo() {
     const startButton = document.getElementById('startButton');
     startButton.disabled = true;
-
-    const useShim = document.getElementById('useShim').checked;
-    const useNative = document.getElementById('useNative').checked;
-
-    if (useShim) {
+    
+    const selectedRadio = document.querySelector('input[name="myOptions"]:checked');
+    if (!selectedRadio) {
+        console.error("NO OPTION SELECTED");
+        alert("No option selected");
+        return;
+    }
+    if (selectedRadio.value == "useShim") {
         document.getElementById('shimGraphContainer').style.display = 'block';
         const shimPipeline = new Pipeline('shim', 'shimGraph');
         shimPipeline.start();
-    }
-    if (useNative) {
+    } else if (selectedRadio.value == "useNative") {
         document.getElementById('nativeGraphContainer').style.display = 'block';
         const nativePipeline = new Pipeline('native', 'nativeGraph'); // MSTP doesn't have glitch count yet
         nativePipeline.start();
+    } else {
+        console.error("NO OPTION SELECTED!");
     }
 }
 
